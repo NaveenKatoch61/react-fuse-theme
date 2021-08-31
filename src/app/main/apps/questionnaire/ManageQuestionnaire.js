@@ -40,7 +40,7 @@ function ManageQuestionnaireApp() {
             <Button
               className="normal-case mx-1 btn_mrg"
               variant="contained"
-              component="a"
+              // component="a"
               //  href="/apps/dashboards/analytics"
               component={Link}
               to="/apps/dashboards/analytics"
