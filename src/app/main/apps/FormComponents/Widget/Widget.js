@@ -23,6 +23,14 @@ function Widget(props) {
                 ></TextField>
               );
             }
+            case "Long Text": {
+              return (
+                <TextField
+                  key={fieldIndex}
+                  fieldData={widgetDataArray[fieldIndex]}
+                ></TextField>
+              );
+            }
             default: {
               return <div key={fieldIndex}></div>;
             }

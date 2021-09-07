@@ -2,6 +2,7 @@ import React from "react";
 import "./TextField.css";
 import { TextField , Tooltip} from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
+import { time } from "date-fns/locale/af";
 
 
 
@@ -41,6 +42,13 @@ function TextFormField(props) {
     multilineColor: {
       backgroundColor: fieldData.FieldBackgroundColor,
     },
+    multilineColorWithHeight:{
+      backgroundColor: fieldData.FieldBackgroundColor,
+      height:fieldData.height,
+    },
+    multilineHeight:{
+      height:fieldData.height,
+    },
     FormHelperTextProps: {
       textAlign:fieldData.FieldSupportingTextAlignment,
     },
@@ -52,12 +60,20 @@ function TextFormField(props) {
   var isRequired = false;
   var disabled = false;
   var hiddenStyle = {};
+  var isMultiline = false;
+  var rows = "1";
   var inputProps = {
     classes: { notchedOutline: "", input: "" },
   };
 
-  if (fieldData.FieldBackgroundColor !== "Default") {
+  if (fieldData.FieldBackgroundColor !== "Default" && fieldData.height!==null) {
+    inputProps.classes.input = cssClasses.multilineColorWithHeight;
+  }
+  else if(fieldData.FieldBackgroundColor !== "Default" && fieldData.height === null){
     inputProps.classes.input = cssClasses.multilineColor;
+  }
+  else if(fieldData.FieldBackgroundColor === "Default" && fieldData.height !== null){
+    inputProps.classes.input = cssClasses.multilineHeight;
   }
 
   var labelStyle = {
@@ -114,6 +130,8 @@ function TextFormField(props) {
     inputProps.readOnly = true;
   }
 
+
+
   if (fieldData.LabelUnderline === "YES") {
     labelStyle.style.textDecoration = "underline";
   }
@@ -132,7 +150,10 @@ function TextFormField(props) {
   } else if (fieldData.LabelAlignment === "Left") {
     // labelStyle.shrink = false;
   }
-
+  if(fieldData.rows !== null){
+    isMultiline = true;
+    rows = fieldData.rows;
+  }
   return (
     <div>
       <Tooltip title={fieldData.FieldCalloutText}>
@@ -152,6 +173,8 @@ function TextFormField(props) {
           defaultValue={fieldData.FieldDefaultValue}
           placeholder={fieldData.FieldPlaceHolder}
           helperText={fieldData.FieldSupportingText}
+          multiline ={isMultiline}
+          rows = {rows}
           FormHelperTextProps={{
             classes:{
                 root:cssClasses.FormHelperTextProps
