@@ -2,6 +2,14 @@ import React from "react";
 import "./Widget.css";
 import TextField from "../TextField/TextField";
 import UnMappedField from "../UnMappedField/UnMappedField";
+import DatePickerForm from "../DateTime/DatePickerForm";
+import DateTimePickerForm from "../DateTime/DateTimePickerForm";
+import TimePickerForm from "../DateTime/TimePickerForm";
+import Separator from "../Separator/Separator";
+import StaticText from "../StaticText/StaticText";
+import VerticalLabel from "../VerticalLabel/VerticalLabel";
+import HorizontalLabel from "../HorizontalLabel/HorizontalLabel";
+import RadioButton from "../RadioButton/RadioButton";
 
 function Widget(props) {
   const widgetDataArray = props.widgetData;
@@ -15,6 +23,11 @@ function Widget(props) {
           );
         } else {
           switch (widgetDataArray[fieldIndex].FieldType) {
+            case "Long Text":
+            case "Integer":
+            case "Float":
+            case "Email":
+            case "Password":
             case "Text": {
               return (
                 <TextField
@@ -23,15 +36,72 @@ function Widget(props) {
                 ></TextField>
               );
             }
-            case "Long Text": {
+            case "Date": {
               return (
-                <TextField
+                <DatePickerForm
                   key={fieldIndex}
                   fieldData={widgetDataArray[fieldIndex]}
-                ></TextField>
+                ></DatePickerForm>
+              );
+            }
+            case "Time": {
+              return (
+                <TimePickerForm
+                  key={fieldIndex}
+                  fieldData={widgetDataArray[fieldIndex]}
+                ></TimePickerForm>
+              );
+            }
+            case "Date Time": {
+              return (
+                <DateTimePickerForm
+                  key={fieldIndex}
+                  fieldData={widgetDataArray[fieldIndex]}
+                ></DateTimePickerForm>
+              );
+            }
+            case "Static Text": {
+              return (
+                <StaticText
+                  key={fieldIndex}
+                  fieldData={widgetDataArray[fieldIndex]}
+                ></StaticText>
+              );
+            }
+            case "Separator": {
+              return (
+                <Separator
+                  key={fieldIndex}
+                  fieldData={widgetDataArray[fieldIndex]}
+                ></Separator>
+              );
+            }
+            case "Vertical Label": {
+              return (
+                <VerticalLabel
+                  key={fieldIndex}
+                  fieldData={widgetDataArray[fieldIndex]}
+                ></VerticalLabel>
+              );
+            }
+            case "Horizontal Label": {
+              return (
+                <HorizontalLabel
+                  key={fieldIndex}
+                  fieldData={widgetDataArray[fieldIndex]}
+                ></HorizontalLabel>
+              );
+            }
+            case "RadioButton": {
+              return (
+                <RadioButton
+                  key={fieldIndex}
+                  fieldData={widgetDataArray[fieldIndex]}
+                ></RadioButton>
               );
             }
             default: {
+              console.log(widgetDataArray[fieldIndex].FieldType);
               return <div key={fieldIndex}></div>;
             }
           }

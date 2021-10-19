@@ -1,18 +1,32 @@
 import React, { useState } from "react";
-import "./TextField.css";
-import { TextField, Tooltip } from "@material-ui/core";
+import "./DatePickerForm.css";
 import { makeStyles } from "@material-ui/core/styles";
-// import NumberOnlyInputMask from "../InputMasks/NumberOnlyInputMask";
+import { KeyboardTimePicker, MuiPickersUtilsProvider } from "@material-ui/pickers";
+import DateFnsUtils from "@date-io/date-fns";
 
-function TextFormField(props) {
+const DatePickerForm = (props) => {
   const fieldData = props.fieldData;
 
-  const [fieldValue, setFieldValue] = useState(fieldData.FieldDefaultValue);
-  var textFieldtype = "text";
+  var defValue;
 
-  if (fieldData.FieldType === "Password") {
-    textFieldtype = "password";
+  if(fieldData.FieldDefaultValue === ""){
+    defValue = null;
   }
+  const [fieldValue, setFieldValue] = useState(defValue);
+
+  var format = "";
+
+
+  var ampm = false;
+  if(fieldData.TimeFormat.includes("TT")){
+    format = " " + fieldData.TimeFormat.replace("TT", "aaaa");
+    ampm = true;
+  }
+  else{
+    format = " " + fieldData.TimeFormat;
+  }
+  
+  
   var borderWidth = "1px";
   switch (fieldData.borderWidth) {
     case "Thin": {
@@ -31,12 +45,7 @@ function TextFormField(props) {
       borderWidth = "";
     }
   }
-
   const useStyles = makeStyles(() => ({
-    notchedOutline: {
-      borderWidth: borderWidth,
-      borderColor: fieldData.borderColor + "!important",
-    },
     customClass: {
       width: fieldData.ControlWidth,
     },
@@ -61,13 +70,10 @@ function TextFormField(props) {
   var isRequired = false;
   var disabled = false;
   var hiddenStyle = {};
-  var isMultiline = false;
-  var rows = "1";
   var inputProps = {
-    classes: { notchedOutline: "", input: "" },
+    classes: { input: "" },
     readOnly: false,
   };
-
   if (
     fieldData.FieldBackgroundColor !== "Default" &&
     fieldData.height !== null
@@ -86,7 +92,7 @@ function TextFormField(props) {
   }
 
   var labelStyle = {
-    // shrink: false,
+    shrink: true,
     style: {
       color: "",
       textDecoration: "none",
@@ -122,9 +128,6 @@ function TextFormField(props) {
     LabelText = fieldData.LabelText;
   }
 
-  if (fieldData.BorderColor !== "Default") {
-    inputProps.classes.notchedOutline = cssClasses.notchedOutline;
-  }
 
   if (fieldData.FieldCategory === "REQUIRED") {
     isRequired = true;
@@ -160,75 +163,30 @@ function TextFormField(props) {
   } else if (fieldData.LabelAlignment === "Left") {
     // labelStyle.shrink = false;
   }
-  if (fieldData.rows !== null && fieldData.rows !== undefined) {
-    isMultiline = true;
-    rows = fieldData.rows;
-  }
-
-  // if (fieldData.FieldType === "Integer" || fieldData.FieldType === "Float") {
-  //   inputProps.inputComponent = NumberOnlyInputMask;
-  // }
-  var pattern = new RegExp(
-    /^(("[\w-\s]+")|([\w-]+(?:\.[\w-]+)*)|("[\w-\s]+")([\w-]+(?:\.[\w-]+)*))(@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$)|(@\[?((25[0-5]\.|2[0-4][0-9]\.|1[0-9]{2}\.|[0-9]{1,2}\.))((25[0-5]|2[0-4][0-9]|1[0-9]{2}|[0-9]{1,2})\.){2}(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[0-9]{1,2})\]?$)/i
-  );
-
-  const setValueHandler = (e) => {
-    if (fieldData.FieldType === "Integer") {
-      setFieldValue(e.target.value.replace(/[^0-9]/g, ""));
-    } else if (fieldData.FieldType === "Float") {
-      if (parseFloat(e.target.value) || e.target.value === "") {
-        setFieldValue(e.target.value);
-      }
-    } else {
-      setFieldValue(e.target.value);
-    }
-  };
-
-  const afterValueChange = (e) => {
-    if (fieldData.FieldType === "Email" && !pattern.test(e.target.value)) {
-      setFieldValue("");
-    }
-  };
   
   return (
-    <div>
-      <Tooltip title={fieldData.FieldCalloutText}>
-        <TextField
-          className={classes}
-          id={fieldData.FieldInternalName}
-          name={fieldData.FieldInternalName}
-          label={LabelText}
-          disabled={disabled}
-          variant="outlined"
-          fullWidth
-          type={textFieldtype}
-          style={hiddenStyle}
-          required={isRequired}
-          InputLabelProps={labelStyle}
-          InputProps={inputProps}
-          // eslint-disable-next-line react/jsx-no-duplicate-props
-          inputProps={{
-            maxLength: fieldData.FieldMaxCharacters,
-            minLength: fieldData.FieldMinimumCharacters,
-            min: fieldData.MinimumValueRange,
-            max: fieldData.MaximumValueRange,
-          }}
-          placeholder={fieldData.FieldPlaceHolder}
-          helperText={fieldData.FieldSupportingText}
-          multiline={isMultiline}
-          rows={rows}
-          FormHelperTextProps={{
-            classes: {
-              root: cssClasses.FormHelperTextProps,
-            },
-          }}
-          onChange={setValueHandler}
-          onBlur={afterValueChange}
-          value={fieldValue}
-        />
-      </Tooltip>
-    </div>
+    <MuiPickersUtilsProvider utils={DateFnsUtils}>
+      <KeyboardTimePicker
+        inputVariant="outlined"
+        clearable
+        className={classes}
+        id={fieldData.FieldInternalName}
+        name={fieldData.FieldInternalName}
+        label={LabelText}
+        disabled={disabled}
+        style={hiddenStyle}
+        required={isRequired}
+        InputLabelProps={labelStyle}
+        InputProps={inputProps}
+        placeholder={fieldData.FieldPlaceHolder}
+        helperText={fieldData.FieldSupportingText}
+        format={format}
+        onChange={setFieldValue}
+        value={fieldValue}
+        ampm={ampm}
+      />
+    </MuiPickersUtilsProvider>
   );
-}
+};
 
-export default TextFormField;
+export default DatePickerForm;

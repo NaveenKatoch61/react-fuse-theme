@@ -5,7 +5,7 @@ export const GET_FORM_DATA = 'GET_FORM_DATA';
 export function getFormData()
 {
     const request = axios.get('http://192.168.5.221:8010/EDM/FormFields/getFormFields', {
-        params:{formId: '79'}  
+        params:{formId: '1102'}  
     });
 
     return (dispatch) =>   request.then((response) => {
