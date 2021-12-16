@@ -1,20 +1,40 @@
-import React from "react";
+import React, {useEffect, useState} from "react";
 import { makeStyles } from "@material-ui/core/styles";
-import "./RadioButton.css";
-import Radio from "@material-ui/core/Radio";
-import RadioGroup from "@material-ui/core/RadioGroup";
+import "./DynamicDropdownLookup.css";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 import FormControl from "@material-ui/core/FormControl";
 import FormLabel from "@material-ui/core/FormLabel";
+import Checkbox from "@material-ui/core/Checkbox";
+import FormGroup from "@material-ui/core/FormGroup";
 
-const RadioButton = (props) => {
+const DynamicDropdownLookup = (props) => {
   const fieldData = props.fieldData;
+
   var options_Array = fieldData.RadioOptions.split("||~~||");
-  options_Array = options_Array.map(
-    (element) => (element = element.split("|~|"))
-  );
+  var options_States = [];
+  options_Array = options_Array.map((element) => {
+    options_States[element.split("|~|")[0]] =
+      element.split("|~|")[2] === "true";
+    return (element = element.split("|~|"));
+  });
+
+  const [state, setState] = React.useState({
+    options_States: options_States,
+  });
+
+  const handleChange = (event) => {
+    var options_State = state.options_States;
+    options_State[event.target.name] = event.target.checked;
+    setState({ ...state, options_States: options_State });
+  };
+
+  useEffect(() => {    
+    //dispatch(Actions.getContacts(props.match.params));
+    console.log("useEffect" +state.options_States);
+}, [state]);
 
   var fontWeight, fontStyle, textDecoration;
+
   if (fieldData.LabelUnderline === "YES") {
     textDecoration = "underline";
   } else {
@@ -94,27 +114,32 @@ const RadioButton = (props) => {
     }
   }
 
+  console.log(options_States);
+
   return (
     <div>
       <FormControl component="fieldset" className={classes}>
         <FormLabel component="legend">{fieldData.LabelText}</FormLabel>
-
-        <RadioGroup
-          aria-label={props.FieldInternalName}
-          name={props.FieldInternalName}
-        >
-          {options_Array.map((option) => (
-            <FormControlLabel
-              value={option[0]}
-              control={<Radio />}
-              label={option[1]}
-              key={option[0]}
-            />
-          ))}
-        </RadioGroup>
+        <FormGroup>
+          {options_Array.map((option) => {
+            return (
+              <FormControlLabel
+                control={
+                  <Checkbox
+                    checked={state.options_States[option[0]]}
+                    name={option[0]}
+                  />
+                }
+                label={option[1]}
+                onChange={handleChange}
+                key={option[0]}
+              />
+            );
+          })}
+        </FormGroup>
       </FormControl>
     </div>
   );
 };
 
-export default RadioButton;
+export default DynamicDropdownLookup;

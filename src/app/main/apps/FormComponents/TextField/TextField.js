@@ -134,9 +134,14 @@ function TextFormField(props) {
   } else if (fieldData.FieldCategory === "DISABLED") {
     disabled = true;
   } else if (fieldData.FieldCategory === "HIDDEN") {
-    hiddenStyle = { display: "none" };
+    hiddenStyle = { visibility: "hidden" };
   } else if (fieldData.FieldCategory === "READONLY") {
     inputProps.readOnly = true;
+  }
+
+  if(fieldData.RemoveFieldSpace=== "Checked")
+  {
+    hiddenStyle = { display: "none" };
   }
 
   if (fieldData.LabelUnderline === "YES") {
@@ -146,7 +151,7 @@ function TextFormField(props) {
     labelStyle.style.fontStyle = "italic";
   }
   if (fieldData.LabelBold === "YES") {
-    // labelStyle.style.fontWeight = 'bold';
+    labelStyle.style.fontWeight = 'bold';
   }
   if (fieldData.LabelFontColor !== "Default") {
     labelStyle.style.color = fieldData.LabelFontColor;

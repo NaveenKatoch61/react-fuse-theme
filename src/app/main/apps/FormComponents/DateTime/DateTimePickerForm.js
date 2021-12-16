@@ -149,7 +149,7 @@ const DateTimePickerForm = (props) => {
     labelStyle.style.fontStyle = "italic";
   }
   if (fieldData.LabelBold === "YES") {
-    // labelStyle.style.fontWeight = 'bold';
+    labelStyle.style.fontWeight = 'bold';
   }
   if (fieldData.LabelFontColor !== "Default") {
     labelStyle.style.color = fieldData.LabelFontColor;

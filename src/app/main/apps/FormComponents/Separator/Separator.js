@@ -58,9 +58,11 @@ const Separator = (props) => {
   }
 
   if (fieldData.Hide === "YES") {
+    style = { visibility: "hidden" };
+  }
+  if (fieldData.RemoveFieldSpace === "Checked") {
     style = { display: "none" };
   }
-
   return (
     <div
       className={classes}

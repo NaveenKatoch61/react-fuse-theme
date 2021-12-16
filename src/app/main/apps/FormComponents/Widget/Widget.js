@@ -10,6 +10,8 @@ import StaticText from "../StaticText/StaticText";
 import VerticalLabel from "../VerticalLabel/VerticalLabel";
 import HorizontalLabel from "../HorizontalLabel/HorizontalLabel";
 import RadioButton from "../RadioButton/RadioButton";
+import CheckBox from "../CheckBox/CheckBox";
+import DynamicDropdownLookup from "../DynamicDropdownLookup/DynamicDropdownLookup";
 
 function Widget(props) {
   const widgetDataArray = props.widgetData;
@@ -98,6 +100,22 @@ function Widget(props) {
                   key={fieldIndex}
                   fieldData={widgetDataArray[fieldIndex]}
                 ></RadioButton>
+              );
+            }
+            case "CheckBox": {
+              return (
+                <CheckBox
+                  key={fieldIndex}
+                  fieldData={widgetDataArray[fieldIndex]}
+                ></CheckBox>
+              );
+            }
+            case "DynamicDropdownLookup": {
+              return (
+                <DynamicDropdownLookup
+                  key={fieldIndex}
+                  fieldData={widgetDataArray[fieldIndex]}
+                ></DynamicDropdownLookup>
               );
             }
             default: {
